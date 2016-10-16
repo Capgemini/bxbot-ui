@@ -1,6 +1,6 @@
 # BX-bot UI (Angular 2 Sample App)
 
-A simple app to get Java devs up and running with Angular 2 fast.
+A learning project and simple Angular 2 sample app.
  
 It is a cut-down version of [BX-bot UI](https://github.com/gazbert/bxbot-ui).
 
