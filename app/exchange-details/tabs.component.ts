@@ -1,5 +1,5 @@
 import {Component, ContentChildren, QueryList, AfterContentInit} from "@angular/core";
-import {Tab} from "./tab.component";
+import {TabComponent} from "./tab.component";
 
 /**
  * TODO Move to shared folder
@@ -12,15 +12,15 @@ import {Tab} from "./tab.component";
     template: `
     <ul class="nav nav-pills">
       <li *ngFor="let tab of tabs; trackBy:trackByTabTitle" (click)="selectTab(tab)" [class.active]="tab.active">            
-        <a href="detail/{{tab.exchangeId}}#">{{tab.title}}</a>
+        <a href="exchange/{{tab.exchangeId}}#">{{tab.title}}</a>
       </li>
     </ul>
     <ng-content></ng-content>
   `
 })
-export class Tabs implements AfterContentInit {
+export class TabsComponent implements AfterContentInit {
 
-    @ContentChildren(Tab) tabs: QueryList<Tab>;
+    @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
 
     // contentChildren are set
     ngAfterContentInit() {
@@ -33,7 +33,7 @@ export class Tabs implements AfterContentInit {
         }
     }
 
-    selectTab(tab: Tab) {
+    selectTab(tab: TabComponent) {
         // deactivate all tabs
         this.tabs.toArray().forEach(tab => tab.active = false);
 

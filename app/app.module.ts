@@ -2,16 +2,15 @@ import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
-import {InMemoryWebApiModule} from "angular2-in-memory-web-api";
+import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {InMemoryDataService} from "./shared/in-memory-data.service";
-
 import {AppComponent} from "./app.component";
-import {routing} from "./app.routing";
-import {ExchangeRestClientService} from "./shared/index";
-import {DashboardComponent} from "./dashboard/index";
-import {ExchangeAdapterComponent, ExchangeAdapterRxComponent} from "./exchange-adapter/index";
-import {EmailAlertsComponent, EqualValidator} from "./email-alerts/index";
-import {ExchangeDetailsComponent, Tabs, Tab} from "./exchange-details/index";
+import {ExchangeRestClientService} from "./model";
+import {DashboardModule} from "./dashboard/dashboard.module";
+import {ExchangeDetailsModule} from "./exchange-details/exchange-details.module";
+import {ExchangeAdapterModule} from "./exchange-adapter/exchange-adapter.module";
+import {EmailAlertsModule} from "./email-alerts/email-alerts.module";
+import {AppRoutingModule} from "./app-routing.module";
 
 /**
  * BX-bot UI main module.
@@ -25,18 +24,14 @@ import {ExchangeDetailsComponent, Tabs, Tab} from "./exchange-details/index";
         ReactiveFormsModule,
         HttpModule,
         InMemoryWebApiModule.forRoot(InMemoryDataService),
-        routing
+        DashboardModule,
+        ExchangeAdapterModule,
+        EmailAlertsModule,
+        ExchangeDetailsModule,
+        AppRoutingModule
     ],
     declarations: [
-        AppComponent,
-        DashboardComponent,
-        ExchangeAdapterComponent,
-        ExchangeAdapterRxComponent,
-        EmailAlertsComponent,
-        EqualValidator,
-        ExchangeDetailsComponent,
-        Tabs,
-        Tab
+        AppComponent
     ],
     providers: [ExchangeRestClientService],
     bootstrap: [AppComponent]

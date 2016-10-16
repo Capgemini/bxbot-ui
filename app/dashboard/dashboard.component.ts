@@ -1,11 +1,17 @@
 import {Router} from "@angular/router";
 import {Component, OnInit} from "@angular/core";
-import {ExchangeRestClientService, Exchange} from "../shared/index";
+import {Exchange, ExchangeRestClientService} from "../model";
 
+/**
+ * The Dashboard component lists the Exchanges the bot is running on.
+ *
+ * @author gazbert
+ */
 @Component({
+    moduleId: module.id,
     selector: 'bx-dashboard',
-    templateUrl: 'app/dashboard/dashboard.component.html',
-    styleUrls: ['app/dashboard/dashboard.component.css']
+    templateUrl: 'dashboard.component.html',
+    styleUrls: ['dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
 
@@ -20,7 +26,7 @@ export class DashboardComponent implements OnInit {
     }
 
     gotoDetail(exchange: Exchange): void {
-        let link = ['/detail', exchange.id];
+        let link = ['/exchange', exchange.id];
         this.router.navigate(link);
     }
 

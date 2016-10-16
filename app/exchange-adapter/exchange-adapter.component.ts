@@ -1,29 +1,33 @@
 import {OnInit, Component, ViewChild} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
-import {Exchange, ErrorCode, ErrorMessage, ExchangeRestClientService} from "../shared/index";
+import {Exchange, ErrorCode, ErrorMessage} from "../model";
+import {ExchangeAdapterService} from "./exchange-adapter.service";
 
 /**
  * Template-driven version of the Exchange Adapter form.
+ *
+ * @author gazbert
  */
 @Component({
+    moduleId: module.id,
     selector: 'bx-exchange-adapter',
-    templateUrl: 'app/exchange-adapter/exchange-adapter.component.html',
-    styleUrls: ['app/exchange-adapter/exchange-adapter.component.css']
+    templateUrl: 'exchange-adapter.component.html',
+    styleUrls: ['exchange-adapter.component.css']
 })
 export class ExchangeAdapterComponent implements OnInit {
 
     exchange: Exchange;
     active = true;
 
-    constructor(private exchangeRestClientService: ExchangeRestClientService, private route: ActivatedRoute,
+    constructor(private exchangeAdapterService: ExchangeAdapterService, private route: ActivatedRoute,
                 private router: Router) {
     }
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
             let id = params['id'];
-            this.exchangeRestClientService.getExchange(id)
+            this.exchangeAdapterService.getExchange(id)
                 .then(exchange => this.exchange = exchange);
         });
     }
@@ -33,10 +37,8 @@ export class ExchangeAdapterComponent implements OnInit {
     }
 
     save(): void {
-        this.exchangeRestClientService.update(this.exchange).then(
-            exchange => {
-                this.goToDashboard();
-            });
+        this.exchangeAdapterService.saveExchange(this.exchange)
+            .then(() => this.goToDashboard());
     }
 
     addErrorCode(code: number): void {
