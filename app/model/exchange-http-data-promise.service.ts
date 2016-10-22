@@ -1,12 +1,27 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import "rxjs/add/operator/toPromise";
 import {Exchange} from "../model";
+import {ExchangeDataPromiseService} from "./exchange-data-promise.service";
 
+// *** Don't forget this else you get runtime error!
+// zone.js:355 Unhandled Promise rejection: this.http.get(...).toPromise is not a function
+import 'rxjs/add/operator/toPromise';
+
+/**
+ * HTTP implementation of the Exchange Data Service.
+ *
+ * It demonstrates use of Promises in call responses. Seems to be easier to use/understand than Observable way?
+ *
+ * @author gazbert
+ */
 @Injectable()
-export class ExchangeRestClientService {
+export class ExchangeHttpDataPromiseService implements ExchangeDataPromiseService {
 
-    private exchangeUrl = 'app/exchanges';  // URL to web api
+    public exchangeUrl = 'app/exchanges';  // URL to web api
+    // vs JSON canned data for quick testing
+    //private exchangeUrl = 'app/exchanges.json'; // URL to JSON file
+
+    private headers = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http) {
     }
@@ -21,8 +36,6 @@ export class ExchangeRestClientService {
     getExchange(id: string): Promise<Exchange> {
         return this.getExchanges().then(exchanges => exchanges.find(exchange => exchange.id === id));
     }
-
-    private headers = new Headers({'Content-Type': 'application/json'});
 
     update(exchange: Exchange): Promise<Exchange> {
         const url = `${this.exchangeUrl}/${exchange.id}`;

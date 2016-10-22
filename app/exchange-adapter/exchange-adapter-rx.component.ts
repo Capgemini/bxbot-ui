@@ -1,10 +1,18 @@
 import {OnInit, Component} from "@angular/core";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {FormGroup, FormBuilder, Validators, FormControl, FormArray} from "@angular/forms";
-import {Exchange, ErrorCode, ErrorMessage, ExchangeRestClientService} from "../model";
+import {Exchange, ErrorCode, ErrorMessage, ExchangeHttpDataObservableService} from "../model";
+
+// NOTE: We need to explicitly pull the rxjs operators in - if not, we get a stinky runtime error e.g.
+// 'Failed: this.http.put(...).map is not a function'
+import 'rxjs/add/operator/map';
 
 /**
  * Reactive version of the Exchange Adapter form.
+ *
+ * For demo purposes, it uses the Observable flavour of the Exchange HTTP data service.
+ *
+ * @author gazbert
  */
 @Component({
     moduleId: module.id,
@@ -17,19 +25,21 @@ export class ExchangeAdapterRxComponent implements OnInit {
     exchange: Exchange;
     active = true;
     public exchangeDetailsForm: FormGroup;
+    errorMessage: string;
 
-    constructor(private exchangeRestClientService: ExchangeRestClientService, private route: ActivatedRoute,
+    constructor(private exchangeDataService: ExchangeHttpDataObservableService, private route: ActivatedRoute,
                 private fb: FormBuilder, private router: Router) {
     }
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
             let id = params['id'];
-            this.exchangeRestClientService.getExchange(id)
-                .then(exchange => {
+            this.exchangeDataService.getExchange(id)
+                .subscribe(exchange => {
                     this.exchange = exchange;
                     this.buildForm();
-                });
+                },
+                error => this.errorMessage = <any>error); // TODO show meaningful error to user
         });
     }
 
@@ -54,10 +64,10 @@ export class ExchangeAdapterRxComponent implements OnInit {
         this.exchangeDetailsForm.get('nonFatalErrorMessages').value.forEach(
             (m) => this.exchange.networkConfig.nonFatalErrorMessages.push({"value": m}));
 
-        this.exchangeRestClientService.update(this.exchange)
-            .then(exchange => {
-                this.goToDashboard();
-            });
+        this.exchangeDataService.update(this.exchange)
+            .subscribe(
+                exchange => {this.goToDashboard()},
+                error => this.errorMessage = <any>error); // TODO show meaningful error to user
     }
 
     addErrorCode(): void {

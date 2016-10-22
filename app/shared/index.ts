@@ -1,1 +1,1 @@
-export * from './in-memory-data.service';
+export * from './title-case.pipe';
