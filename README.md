@@ -1,5 +1,7 @@
 # BX-bot UI (Angular 2 Sample App)
 
+[![Build Status](https://travis-ci.org/Capgemini/bxbot-ui.svg?branch=master)](https://travis-ci.org/Capgemini/bxbot-ui)
+    
 A learning project and simple Angular 2 sample app.
  
 It is a cut-down version of [BX-bot UI](https://github.com/gazbert/bxbot-ui).
