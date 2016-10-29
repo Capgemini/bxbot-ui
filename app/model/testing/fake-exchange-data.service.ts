@@ -37,7 +37,7 @@ export class FakeExchangeDataPromiseService extends ExchangeHttpDataPromiseServi
 // re-export for tester convenience
 export var EXCHANGES: Exchange[] = [
 
-    new Exchange('Bitstamp', 'com.gazbert.bxbot.exchanges.BitstampExchangeAdapter',
+    new Exchange('bitstamp', 'Bitstamp', 'com.gazbert.bxbot.exchanges.BitstampExchangeAdapter',
         new NetworkConfig(60,
             [
                 {value: 503},
@@ -49,8 +49,10 @@ export var EXCHANGES: Exchange[] = [
                 {value: "Connection refused"},
                 {value: "Remote host closed connection during handshake"}
             ]
-        )),
-    new Exchange('GDAX', 'com.gazbert.bxbot.exchanges.GdaxExchangeAdapter',
+        ),
+        null,
+        null),
+    new Exchange('gdax', 'GDAX', 'com.gazbert.bxbot.exchanges.GdaxExchangeAdapter',
         new NetworkConfig(60,
             [
                 {value: 503},
@@ -62,8 +64,10 @@ export var EXCHANGES: Exchange[] = [
                 {value: "Connection refused"},
                 {value: "Remote host closed connection during handshake"}
             ]
-        )),
-    new Exchange('Gemini', 'com.gazbert.bxbot.exchanges.GeminiExchangeAdapter',
+        ),
+        null,
+        null),
+    new Exchange('gemini', 'Gemini', 'com.gazbert.bxbot.exchanges.GeminiExchangeAdapter',
         new NetworkConfig(60,
             [
                 {value: 503},
@@ -75,5 +79,7 @@ export var EXCHANGES: Exchange[] = [
                 {value: "Connection refused"},
                 {value: "Remote host closed connection during handshake"}
             ]
-        )),
+        ),
+        null,
+        null)
 ];
