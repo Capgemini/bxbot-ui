@@ -1,8 +1,8 @@
-import {Component, ContentChildren, QueryList, AfterContentInit} from "@angular/core";
-import {TabComponent} from "./tab.component";
+import {Component, ContentChildren, QueryList, AfterContentInit} from '@angular/core';
+import {TabComponent} from './tab.component';
 
 /**
- * TODO Move to shared folder
+ * TODO Move to shared folder and make re-usable
  *
  * Based on the excellent:
  * http://juristr.com/blog/2016/02/learning-ng2-creating-tab-component/
@@ -25,7 +25,7 @@ export class TabsComponent implements AfterContentInit {
     // contentChildren are set
     ngAfterContentInit() {
         // get all active tabs
-        let activeTabs = this.tabs.filter((tab)=>tab.active);
+        let activeTabs = this.tabs.filter((t) => t.active);
 
         // if there is no active tab set, activate the first
         if (activeTabs.length === 0) {
@@ -35,7 +35,7 @@ export class TabsComponent implements AfterContentInit {
 
     selectTab(tab: TabComponent) {
         // deactivate all tabs
-        this.tabs.toArray().forEach(tab => tab.active = false);
+        this.tabs.toArray().forEach(t => t.active = false);
 
         // activate the tab the user has clicked on.
         tab.active = true;

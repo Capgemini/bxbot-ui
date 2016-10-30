@@ -1,7 +1,12 @@
-import {OnInit, Component, ViewChild} from "@angular/core";
-import {ActivatedRoute, Params, Router} from "@angular/router";
-import {NgForm} from "@angular/forms";
-import {Exchange, ErrorCode, ErrorMessage, ExchangeHttpDataPromiseService} from "../model";
+import {OnInit, Component, ViewChild} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {NgForm} from '@angular/forms';
+import {
+    ExchangeAdapter,
+    ErrorCode,
+    ErrorMessage,
+    ExchangeAdapterHttpDataPromiseService
+} from '../model/exchange-adapter';
 
 /**
  * Template-driven version of the Exchange Adapter form.
@@ -16,18 +21,37 @@ import {Exchange, ErrorCode, ErrorMessage, ExchangeHttpDataPromiseService} from 
 })
 export class ExchangeAdapterComponent implements OnInit {
 
-    exchange: Exchange;
+    exchangeAdapter: ExchangeAdapter;
     active = true;
 
-    constructor(private exchangeDataService: ExchangeHttpDataPromiseService, private route: ActivatedRoute,
+    @ViewChild('exchangeDetailsForm') currentForm: NgForm;
+    exchangeDetailsForm: NgForm;
+
+    formErrors = {
+        'adapter': '',
+        'connectionTimeout': ''
+    };
+
+    validationMessages = {
+        'adapter': {
+            'required': 'Adapter Name is required.',
+            'maxlength': 'Adapter Name cannot be more than 120 characters long.'
+        },
+        'connectionTimeout': {
+            'required': 'Connection timeout is required.',
+            'pattern': 'Connection timeout must be a whole number.'
+        }
+    };
+
+    constructor(private exchangeAdapterDataService: ExchangeAdapterHttpDataPromiseService, private route: ActivatedRoute,
                 private router: Router) {
     }
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
             let id = params['id'];
-            this.exchangeDataService.getExchange(id)
-                .then(exchange => this.exchange = exchange);
+            this.exchangeAdapterDataService.getExchangeAdapterByExchangeId(id)
+                .then(exchangeAdapter => this.exchangeAdapter = exchangeAdapter);
         });
     }
 
@@ -36,34 +60,31 @@ export class ExchangeAdapterComponent implements OnInit {
     }
 
     save(): void {
-        this.exchangeDataService.update(this.exchange)
+        this.exchangeAdapterDataService.update(this.exchangeAdapter)
             .then(() => this.goToDashboard());
     }
 
     addErrorCode(code: number): void {
-        this.exchange.networkConfig.nonFatalErrorHttpStatusCodes.push(new ErrorCode(code));
+        this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.push(new ErrorCode(code));
     }
 
     deleteErrorCode(code: ErrorCode): void {
-        this.exchange.networkConfig.nonFatalErrorHttpStatusCodes =
-            this.exchange.networkConfig.nonFatalErrorHttpStatusCodes.filter(c => c !== code);
+        this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes =
+            this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.filter(c => c !== code);
     }
 
     addErrorMessage(message: string): void {
-        this.exchange.networkConfig.nonFatalErrorMessages.push(new ErrorMessage(message));
+        this.exchangeAdapter.networkConfig.nonFatalErrorMessages.push(new ErrorMessage(message));
     }
 
     deleteErrorMessage(message: ErrorMessage): void {
-        this.exchange.networkConfig.nonFatalErrorMessages =
-            this.exchange.networkConfig.nonFatalErrorMessages.filter(m => m !== message);
+        this.exchangeAdapter.networkConfig.nonFatalErrorMessages =
+            this.exchangeAdapter.networkConfig.nonFatalErrorMessages.filter(m => m !== message);
     }
 
     // ------------------------------------------------------------------
     // Form validation
     // ------------------------------------------------------------------
-
-    exchangeDetailsForm: NgForm;
-    @ViewChild('exchangeDetailsForm') currentForm: NgForm;
 
     ngAfterViewChecked() {
         this.formChanged();
@@ -87,33 +108,21 @@ export class ExchangeAdapterComponent implements OnInit {
         const form = this.exchangeDetailsForm.form;
 
         for (const field in this.formErrors) {
-            // clear previous error message (if any)
-            this.formErrors[field] = '';
-            const control = form.get(field);
+            if (this.formErrors.hasOwnProperty(field)) {
+                // clear previous error message (if any)
+                this.formErrors[field] = '';
+                const control = form.get(field);
 
-            if (control && control.dirty && !control.valid) {
-                const messages = this.validationMessages[field];
-                for (const key in control.errors) {
-                    this.formErrors[field] += messages[key] + ' ';
+                if (control && control.dirty && !control.valid) {
+                    const messages = this.validationMessages[field];
+                    for (const key in control.errors) {
+                        if (control.errors.hasOwnProperty(key)) {
+                            this.formErrors[field] += messages[key] + ' ';
+                        }
+                    }
                 }
             }
         }
     }
-
-    formErrors = {
-        'adapter': '',
-        'connectionTimeout': ''
-    };
-
-    validationMessages = {
-        'adapter': {
-            'required': 'Adapter Name is required.',
-            'maxlength': 'Adapter Name cannot be more than 120 characters long.'
-        },
-        'connectionTimeout': {
-            'required': 'Connection timeout is required.',
-            'pattern': 'Connection timeout must be a whole number.'
-        }
-    };
 }
 
