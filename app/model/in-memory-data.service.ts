@@ -310,11 +310,11 @@ export class InMemoryDataService implements InMemoryDbService {
          */
         let tradingStrategies = [
             {
-                id: 'btce_macd',
-                label: 'MACD Indicator',
+                id: 'btce_macd_rsi',
+                label: 'MACD RSI Indicator',
                 exchangeId: 'btce',
-                description: 'MACD Indicator for deciding when to enter and exit trades.',
-                className: 'com.gazbert.bxbot.strategies.MacdStrategy'
+                description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
             },
             {
                 id: 'btce_long-scalper',
@@ -324,12 +324,75 @@ export class InMemoryDataService implements InMemoryDbService {
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
             },
             {
-                id: 'gdax_macd',
+                id: 'gdax_long-scalper',
+                label: 'Long Scalper',
+                exchangeId: 'gdax',
+                description: 'Scalping strategy that buys low and sells high.',
+                className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+            },
+            {
+                id: 'gdax_ema',
                 label: 'MACD Indicator',
                 exchangeId: 'gdax',
-                description: 'MACD Indicator for deciding when to enter and exit trades.',
+                description: 'EMA Indicator algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+            },
+            {
+                id: 'bitstamp_ema',
+                label: 'EMA Indicator',
+                exchangeId: 'bitstamp',
+                description: 'EAM Indicator algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+            },
+            {
+                id: 'gemini_macd',
+                label: 'MACD Indicator',
+                exchangeId: 'gemini',
+                description: 'MACD Indicator algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.MacdStrategy'
             },
+            {
+                id: 'gemini_long-scalper',
+                label: 'Long Scalper',
+                exchangeId: 'gemini',
+                description: 'Scalping strategy that buys low and sells high.',
+                className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+            },
+            {
+                id: 'okcoin_ema',
+                label: 'MACD Indicator',
+                exchangeId: 'okcoin',
+                description: 'EMA Indicator algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+            },
+            {
+                id: 'huobi_ema_rsi',
+                label: 'MACD RSI Indicator',
+                exchangeId: 'huobi',
+                description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
+            },
+            {
+                id: 'bitfinex_long-scalper',
+                label: 'Long Scalper',
+                exchangeId: 'bitfinex',
+                description: 'Scalping strategy that buys low and sells high.',
+                className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+            },
+            {
+                id: 'kraken_ema_rsi',
+                label: 'EMA RSI Indicator',
+                exchangeId: 'kraken',
+                description: 'EMA Indicator and RSI algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.EmaRsiStrategy'
+            },
+            {
+                id: 'itbit_long-scalper',
+                label: 'Long Scalper',
+                exchangeId: 'itbit',
+                description: 'Scalping strategy that buys low and sells high.',
+                className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+            }
         ];
 
         /**
@@ -346,6 +409,94 @@ export class InMemoryDataService implements InMemoryDbService {
                 accountPassword: 'iLoveHoth',
                 toAddress: 'jabba@tatooine.space',
                 fromAddress: 'boba.fett@hoth.space'
+            },
+            {
+                id: 'bitstamp_email_alerts',
+                exchangeId: 'bitstamp',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'darthvader',
+                accountPassword: 'TheForceIsStrongWithThisOne',
+                toAddress: 'boba.fett@hoth.space',
+                fromAddress: 'darth@deathstar.space'
+            },
+            {
+                id: 'gdax_email_alerts',
+                exchangeId: 'gdax',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'solo',
+                accountPassword: 'NeverTellMeTheOdds!',
+                toAddress: 'lando@cloudcity.space',
+                fromAddress: 'han.solo@falcon.space'
+            },
+            {
+                id: 'itbit_email_alerts',
+                exchangeId: 'itbit',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'gold5',
+                accountPassword: 'stayOnTarget',
+                toAddress: 'chewy@kashyyyk.space',
+                fromAddress: 'gold5@x-wing.space'
+            },
+            {
+                id: 'huobi_email_alerts',
+                exchangeId: 'huobi',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'ackbar',
+                accountPassword: 'ItsATrap!',
+                toAddress: 'leia@alderaan.space',
+                fromAddress: 'admiral.ackbar@some-one.space'
+            },
+            {
+                id: 'okcoin_email_alerts',
+                exchangeId: 'okcoin',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'yoda',
+                accountPassword: 'DoOrDoNotThereIsNoTry',
+                toAddress: 'r2d2@naboo.space',
+                fromAddress: 'master.yoda@dagobah.space',
+            },
+            {
+                id: 'kraken_email_alerts',
+                exchangeId: 'kraken',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'obiwan',
+                accountPassword: 'UseTheForceLuke',
+                toAddress: 'luke.skywalker@tatooine.space',
+                fromAddress: 'Obi.Wan@coruscant.space',
+            },
+            {
+                id: 'bitfinex_email_alerts',
+                exchangeId: 'bitfinex',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'chewy',
+                accountPassword: 'grrrrrrrrrrrrrr',
+                toAddress: 'luke.skywalker@tatooine.space',
+                fromAddress: 'chewbacca@kashyyyk.space',
+            },
+            {
+                id: 'gemini_email_alerts',
+                exchangeId: 'gemini',
+                enabled: true,
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: 587,
+                accountUsername: 'c3po',
+                accountPassword: 'ohMy!',
+                toAddress: 'bb-8@jakku.space',
+                fromAddress: 'c-3p0@naboo.space',
             }
         ];
 
