@@ -1,56 +1,50 @@
-/******************************************************************************
+/******************************************************************************************
  *
- * End 2 End Protractor tests (using Jasmine) for testing BX-bot UI behaviour.
+ * End 2 End Protractor tests (using Jasmine) for testing various scenarios using the App.
  * See: http://www.protractortest.org/#/tutorial
  *
- ******************************************************************************/
+ * TODO - Use by.repeater()/model() instead of by.css() once Angular implement it for lists:
+ * https://angular.io/docs/ts/latest/guide/upgrade.html
+ * https://github.com/angular/protractor/issues/3205
+ *
+ * TODO - write tests for scenarios like:
+ *
+ * 1. Goto Dashboard, Click on GDAX, Update Market, Save, Update Email Alerts, Save, Goto Dashboard,
+ *    click on GDAX, check Market and Email Alerts updates are persisted.
+ * 2. etc...
+ ****************************************************************************************/
 import {browser, element, by} from "protractor";
 
 /**
- * Dashboard tests.
- * TODO Add lots more tests!
+ * Misc Scenario screen tests.
+ *
+ * TODO - Tests for add/remove markets
+ * TODO - Tests for updating/validating fields
+ * TODO - Tests for save and cancel
  */
-describe('Dashboard Tests', function () {
-
-    let expectedMsg = 'BX-bot Admin Console';
+xdescribe('Misc Scenario Tests', function () {
 
     beforeEach(function () {
         browser.get('');
     });
 
-    it('should display browser title: ' + expectedMsg, function () {
-        expect(browser.getTitle()).toEqual(expectedMsg);
+    it('Should render BTC-e Market config', function () {
+
+        let dashboardItems = element.all(by.css('bx-dashboard-item'));
+        dashboardItems.get(4).click();
+        expect(element(by.css('h2')).getText()).toEqual('BTC-e Exchange Details');
+
+        let tabLinks = element.all(by.css('li'));
+        tabLinks.get(1).click();
+
+        expect(element(by.id('marketEnabled_0')).getAttribute('ng-reflect-model')).toBe(null);
+        expect(element(by.id('marketId_0')).getAttribute('value')).toBe('btce_btc_usd');
+        expect(element(by.id('marketName_0')).getAttribute('value')).toBe('BTC/USD');
+        expect(element(by.id('baseCurrency_0')).getAttribute('value')).toBe('BTC');
+        expect(element(by.id('counterCurrency_0')).getAttribute('value')).toBe('USD');
+        expect(element(by.id('tradingStrategy_0')).getAttribute('value')).toBe('btce_macd_rsi');
     });
-
-    it('should display admin console heading name: ' + expectedMsg, function () {
-        expect(element(by.css('h1')).getText()).toEqual(expectedMsg);
-    });
-
-    // TODO FIXME - how do I access the exchange list?
-    // it('should display 8 Exchange items', function () {
-    //     var dashboardItems = element.all(by.repeater('exchange in exchanges'));
-    //     expect(dashboardItems.count()).toBe(8);
-    // });
-
 });
-
-/**
- * Exchange Details screen tests.
- */
-describe('Exchange Details Tests', function () {
-
-    let expectedMsg = 'GDAX Exchange Details';
-
-    beforeEach(function () {
-        browser.get('/exchange/gdax');
-    });
-
-    // TODO FIXME - times out :-(
-    // it('should display GDAX Exchange Details in title: ' + expectedMsg, function () {
-    //     expect(element(by.css('h2')).getText()).toEqual(expectedMsg);
-    // });
-});
-
 
 //-----------------------------------------------------------------------------
 // Stuff from previous BX-bot UI that I coded in Angular 1.x ...
@@ -158,10 +152,3 @@ describe('Exchange Details Tests', function () {
 //
 //     });
 // });
-
-
-
-
-
-
-

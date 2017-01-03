@@ -8,8 +8,7 @@ import {TradingStrategy} from '../model/trading-strategy';
  * Based off the the main Angular tutorial:
  * https://angular.io/resources/live-examples/testing/ts/app-specs.plnkr.html
  *
- * TODO When should I/should I not use the testbed?
- * TODO Increase coverage for the form input + validation, adding/updating/deleting Markets.
+ * TODO Increase coverage for the form input + validation, adding/updating/deleting Trading Strategies.
  *
  * @author gazbert
  */
@@ -22,18 +21,24 @@ describe('TradingStrategiesComponent tests without TestBed', () => {
     let expectedTradingStrategy_1: TradingStrategy;
     let expectedTradingStrategy_2: TradingStrategy;
 
+    let expectedUpdatedTradingStrategy_2: TradingStrategy;
+
     let spyTradingStrategyDataService: any;
+    let spyMarketDataService: any; // mock this out, not testing it here, has it's own tests suite.
     let router: any;
 
     beforeEach(done => {
 
-        expectedTradingStrategy_1 = new TradingStrategy('gdax_macd', 'MACD Indicator', 'gdax',
+        expectedTradingStrategy_1 = new TradingStrategy('gdax_macd', 'gdax', 'MACD Indicator',
             'MACD Indicator for deciding when to enter and exit trades.', 'com.gazbert.bxbot.strategies.MacdStrategy');
 
-        expectedTradingStrategy_2 = new TradingStrategy('gdax_ema', 'MACD Indicator', 'gdax',
+        expectedTradingStrategy_2 = new TradingStrategy('gdax_ema', 'gdax', 'EMA Indicator',
             'EMA Indicator for deciding when to enter and exit trades.', 'com.gazbert.bxbot.strategies.EmaStrategy');
 
         expectedTradingStrategies = [expectedTradingStrategy_1, expectedTradingStrategy_2];
+
+        expectedUpdatedTradingStrategy_2 = new TradingStrategy('gdax_scalper', 'gdax', 'Long Scalper',
+            'Scalper that buys low and sells high, like duh.', 'com.gazbert.bxbot.strategies.LongScalper');
 
         activatedRoute = new ActivatedRouteStub();
         activatedRoute.testParams = {id: expectedTradingStrategy_1.exchangeId};
@@ -44,15 +49,16 @@ describe('TradingStrategiesComponent tests without TestBed', () => {
             ['getAllTradingStrategiesForExchange', 'updateTradingStrategy']);
 
         spyTradingStrategyDataService.getAllTradingStrategiesForExchange.and.returnValue(Promise.resolve(expectedTradingStrategies));
-        spyTradingStrategyDataService.updateTradingStrategy.and.returnValue(Promise.resolve(expectedTradingStrategy_1));
+        spyTradingStrategyDataService.updateTradingStrategy.and.returnValue(Promise.resolve(expectedUpdatedTradingStrategy_2));
 
-        tradingStrategiesComponent = new TradingStrategiesComponent(spyTradingStrategyDataService, <any> activatedRoute, router);
+        tradingStrategiesComponent = new TradingStrategiesComponent(spyTradingStrategyDataService, spyMarketDataService,
+            <any> activatedRoute, router);
         tradingStrategiesComponent.ngOnInit();
 
         spyTradingStrategyDataService.getAllTradingStrategiesForExchange.calls.first().returnValue.then(done);
     });
 
-    it('should expose the Trading Strategies retrieved from the service', () => {
+    it('should expose Trading Strategies retrieved from TradingStrategyDataService', () => {
         expect(tradingStrategiesComponent.tradingStrategies).toBe(expectedTradingStrategies);
 
         // paranoia ;-)
@@ -65,11 +71,14 @@ describe('TradingStrategiesComponent tests without TestBed', () => {
         expect(router.navigate.calls.any()).toBe(true, 'router.navigate called');
     });
 
-    // TODO Test update on only 1 strategy
-    it('should save when click Save for valid input', () => {
+    it('should save when click Save for valid input', done => {
         tradingStrategiesComponent.save(true);
-        expect(spyTradingStrategyDataService.updateTradingStrategy.calls.any()).toBe(true, 'TradingStrategyDataService.save called');
-        expect(router.navigate.calls.any()).toBe(false, 'router.navigate not called yet');
+        spyTradingStrategyDataService.updateTradingStrategy.calls.first().returnValue
+            .then((updatedStrategy) => {
+                expect(updatedStrategy).toBe(expectedUpdatedTradingStrategy_2);
+                expect(router.navigate.calls.any()).toBe(true, 'router.navigate called');
+                done();
+            });
     });
 
     it('should NOT save when click Save for invalid input', () => {

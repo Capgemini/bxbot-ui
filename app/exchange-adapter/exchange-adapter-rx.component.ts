@@ -25,18 +25,24 @@ export class ExchangeAdapterRxComponent implements OnInit {
     active = true;
     public exchangeAdapterForm: FormGroup;
     errorMessage: string;
+    formSaved = false;
 
     formErrors = {
         'adapter': '',
+        'adapterName': '',
         'connectionTimeout': '',
         'nonFatalErrorHttpStatusCodes': '',
         'nonFatalErrorMessages': ''
     };
 
     validationMessages = {
-        'adapter': {
+        'adapterName': {
             'required': 'Adapter name is required.',
-            'maxlength': 'Adapter name cannot be more than 120 characters long.',
+            'maxlength': 'Adapter name cannot be more than 50 characters long.'
+        },
+        'className': {
+            'required': 'Adapter class name is required.',
+            'maxlength': 'Adapter class name cannot be more than 120 characters long.',
             'pattern': 'Not a valid fully qualified Java class name.'
         },
         'connectionTimeout': {
@@ -63,7 +69,7 @@ export class ExchangeAdapterRxComponent implements OnInit {
             let id = params['id'];
             this.exchangeAdapterDataService.getExchangeAdapterByExchangeId(id)
                 .subscribe(exchangeAdapter => {
-                    this.exchangeAdapter = exchangeAdapter[0]; // TODO hack for in memory service returning an array
+                    this.exchangeAdapter = exchangeAdapter;
                     this.buildForm();
                 },
                 error => this.errorMessage = <any>error); // TODO show meaningful error to user
@@ -74,29 +80,37 @@ export class ExchangeAdapterRxComponent implements OnInit {
          this.router.navigate(['dashboard']);
     }
 
-    save(): void {
+    save(isValid: boolean): void {
+        this.formSaved = true;
+        if (isValid) {
 
-        // TODO Must be better way to adapt/map domain model <-> form UI model?
-        this.exchangeAdapter.id = this.exchangeAdapterForm.get('exchangeId').value;
-        this.exchangeAdapter.adapter = this.exchangeAdapterForm.get('adapter').value;
-        this.exchangeAdapter.networkConfig.connectionTimeout = this.exchangeAdapterForm.get('connectionTimeout').value;
+            // TODO Must be better way to adapt/map domain model <-> form UI model?
+            this.exchangeAdapter.id = this.exchangeAdapterForm.get('exchangeId').value;
+            this.exchangeAdapter.name = this.exchangeAdapterForm.get('adapterName').value;
+            this.exchangeAdapter.className = this.exchangeAdapterForm.get('className').value;
+            this.exchangeAdapter.networkConfig.connectionTimeout = this.exchangeAdapterForm.get('connectionTimeout').value;
 
-        // hack for now til I sort the JSON integration spec out with Boot app
-        this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.length = 0;
-        this.exchangeAdapterForm.get('nonFatalErrorHttpStatusCodes').value.forEach(
-            (c) => this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.push({'value': parseInt(c, 10)}));
+            // hack for now til I sort the JSON integration spec out with Boot app
+            this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.length = 0;
+            this.exchangeAdapterForm.get('nonFatalErrorHttpStatusCodes').value.forEach(
+                (c) => this.exchangeAdapter.networkConfig.nonFatalErrorHttpStatusCodes.push({'value': parseInt(c, 10)}));
 
-        // hack for now til I sort the JSON integration spec out with Boot app
-        this.exchangeAdapter.networkConfig.nonFatalErrorMessages.length = 0;
-        this.exchangeAdapterForm.get('nonFatalErrorMessages').value.forEach(
-            (m) => this.exchangeAdapter.networkConfig.nonFatalErrorMessages.push({'value': m}));
+            // hack for now til I sort the JSON integration spec out with Boot app
+            this.exchangeAdapter.networkConfig.nonFatalErrorMessages.length = 0;
+            this.exchangeAdapterForm.get('nonFatalErrorMessages').value.forEach(
+                (m) => this.exchangeAdapter.networkConfig.nonFatalErrorMessages.push({'value': m}));
 
-        this.exchangeAdapterDataService.update(this.exchangeAdapter)
-            .subscribe(
-                exchangeAdapter => {
-                    this.goToDashboard();
-                },
-                error => this.errorMessage = <any>error); // TODO show meaningful error to user
+            this.exchangeAdapterDataService.update(this.exchangeAdapter)
+                .subscribe(
+                    exchangeAdapter => {
+                        this.goToDashboard();
+                    },
+                    error => this.errorMessage = <any>error); // TODO show meaningful error to user
+        }
+    }
+
+    isFormSaved() {
+        return this.formSaved;
     }
 
     addErrorCode(): void {
@@ -127,7 +141,12 @@ export class ExchangeAdapterRxComponent implements OnInit {
 
         this.exchangeAdapterForm = this.fb.group({
             exchangeId: new FormControl({value: this.exchangeAdapter.id, disabled: true}, Validators.required),
-            adapter: [this.exchangeAdapter.adapter, [
+            adapterName: [this.exchangeAdapter.name, [
+                Validators.required,
+                Validators.minLength(1),
+                Validators.maxLength(50)
+            ]],
+            className: [this.exchangeAdapter.className, [
                 Validators.required,
                 Validators.minLength(1),
                 Validators.maxLength(120),
@@ -202,7 +221,6 @@ export class ExchangeAdapterRxComponent implements OnInit {
         }
 
         const form = this.exchangeAdapterForm;
-
         for (const field in this.formErrors) {
 
             if (this.formErrors.hasOwnProperty(field)) {
@@ -224,7 +242,7 @@ export class ExchangeAdapterRxComponent implements OnInit {
         // TODO hack to go though error codes - FIX needed to id individual inputs else we duplicate validation messages!
         const errorCodeControl = <FormArray>this.exchangeAdapterForm.controls['nonFatalErrorHttpStatusCodes'];
         errorCodeControl.controls.forEach((code) => {
-            if (code && code.dirty && !code.valid) {
+            if (code && !code.valid) {
                 this.formErrors['nonFatalErrorHttpStatusCodes'] = '';
                 const messages = this.validationMessages['nonFatalErrorHttpStatusCodes'];
                 for (const key in code.errors) {
@@ -238,7 +256,7 @@ export class ExchangeAdapterRxComponent implements OnInit {
         // TODO hack to go though error messages - FIX needed to id individual inputs else we duplicate validation messages!
         const errorMessageControl = <FormArray>this.exchangeAdapterForm.controls['nonFatalErrorMessages'];
         errorMessageControl.controls.forEach((msg) => {
-            if (msg && msg.dirty && !msg.valid) {
+            if (msg && !msg.valid) {
                 this.formErrors['nonFatalErrorMessages'] = '';
                 const messages = this.validationMessages['nonFatalErrorMessages'];
                 for (const key in msg.errors) {
@@ -248,6 +266,11 @@ export class ExchangeAdapterRxComponent implements OnInit {
                 }
             }
         });
+
+        // reset so we don't error new (empty) errorCode/errorMsg before user gets chance to save
+        if (form.valid) {
+            this.formSaved = false;
+        }
     }
 
     httpCodeWhitelistChecker(control: FormControl) {

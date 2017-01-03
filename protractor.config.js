@@ -27,8 +27,17 @@ exports.config = {
     framework: 'jasmine',
 
     // Spec patterns are relative to this config file
-    specs: ['**/*e2e-spec.js'],
+    specs: [
+        // '**/*e2e-spec.js'
 
+        '**/app.e2e-spec.js',
+        '**/dashboard.e2e-spec.js',
+        '**/email-alerts.e2e-spec.js',
+        '**/exchange-adapter.e2e-spec.js',
+        '**/exchange-details.e2e-spec.js',
+        '**/markets.e2e-spec.js',
+        '**/trading-strategies.e2e-spec.js'
+    ],
 
     // For angular tests
     useAllAngular2AppRoots: true,
@@ -57,8 +66,7 @@ exports.config = {
     },
 
     jasmineNodeOpts: {
-        // defaultTimeoutInterval: 60000,
-        defaultTimeoutInterval: 10000,
+        defaultTimeoutInterval: 15000,
         showTiming: true,
         print: function () {
         }

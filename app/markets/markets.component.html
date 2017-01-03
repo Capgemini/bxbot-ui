@@ -19,7 +19,7 @@
 
                         <!-- Enabled? -->
                         <div class="form-group">
-                            <label for="marketEnabled_{{i}}">Enabled:</label>
+                            <label for="marketEnabled_{{i}}">Enabled</label>
                             <input [(ngModel)]="markets[i].enabled"
                                    type="checkbox" class="checkbox-inline" id="marketEnabled_{{i}}"
                                    name="marketEnabled_{{i}}" #marketEnabled="ngModel"/>
@@ -28,8 +28,8 @@
                         <!-- Market Name -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="marketName_{{i}}">Name:</label>
-                                <input [(ngModel)]="markets[i].label"
+                                <label for="marketName_{{i}}">Name</label>
+                                <input [(ngModel)]="markets[i].name"
                                        type="text" class="form-control" id="marketName_{{i}}"
                                        name="marketName_{{i}}" #marketName="ngModel" required maxlength="50"
                                        placeholder="BTC/USD"/>
@@ -47,28 +47,10 @@
                             </div>
                         </div>
 
-                        <!-- Market Id -->
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label for="marketId_{{i}}">Id:</label>
-                                <input [(ngModel)]="markets[i].id"
-                                       type="text" class="form-control" id="marketId_{{i}}"
-                                       name="marketId_{{i}}" #marketId="ngModel" required maxlength="50"/>
-
-                                <!--<div [hidden]="marketId.valid || marketId.pristine" class="alert alert-danger">-->
-                                    <!--Market Id must be set.-->
-                                <!--</div>-->
-
-                                <div [hidden]="marketId.valid || (marketId.pristine && !f.submitted)" class="alert alert-danger">
-                                    Market Id must be set.
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Base Currency -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="baseCurrency_{{i}}">Base Currency:</label>
+                                <label for="baseCurrency_{{i}}">Base Currency</label>
                                 <input [(ngModel)]="markets[i].baseCurrency"
                                        type="text" class="form-control" id="baseCurrency_{{i}}"
                                        name="baseCurrency_{{i}}" #baseCurrency="ngModel" required maxlength="3"
@@ -87,7 +69,7 @@
                         <!-- Counter Currency -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="counterCurrency_{{i}}">Counter Currency:</label>
+                                <label for="counterCurrency_{{i}}">Counter Currency</label>
                                 <input [(ngModel)]="markets[i].counterCurrency"
                                        type="text" class="form-control" id="counterCurrency_{{i}}"
                                        name="counterCurrency_{{i}}" #counterCurrency="ngModel" required maxlength="3"
@@ -106,18 +88,18 @@
                         <!-- Trading Strategy -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="tradingStrategy_{{i}}">Trading Strategy:</label>
-                                <input [(ngModel)]="markets[i].tradingStrategy.id"
-                                       type="text" class="form-control" id="tradingStrategy_{{i}}"
-                                       name="tradingStrategy_{{i}}" #tradingStrategy="ngModel" required maxlength="50"/>
+                                <label for="tradingStrategy_{{i}}">Trading Strategy</label>
+                                <select name="tradingStrategy_{{i}}" id="tradingStrategy_{{i}}" class="form-control" required
+                                        [(ngModel)]="markets[i].tradingStrategy.name" #strategy="ngModel">
+                                    <option *ngFor="let tradingStrategy of tradingStrategies" [ngValue]="tradingStrategy.name">
+                                        {{tradingStrategy.name}}
+                                    </option>
+                                </select>
 
-                                <!--<div [hidden]="tradingStrategy.valid || tradingStrategy.pristine" class="alert alert-danger">-->
-                                    <!--Trading Strategy must be set.-->
-                                <!--</div>-->
-
-                                <div [hidden]="tradingStrategy.valid || (tradingStrategy.pristine && !f.submitted)" class="alert alert-danger">
-                                    Trading Strategy must be set.
+                                <div [hidden]="strategy.valid || (strategy.pristine && !f.submitted)" class="alert alert-danger">
+                                    A Trading Strategy must be selected
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -138,8 +120,8 @@
              Must have type for button else Chrome reloads entire app on Cancel click!
              http://stackoverflow.com/questions/38120756/angular2-router-navigate-refresh-page
              -->
-            <button type="button" (click)="goToDashboard()" class="btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button id="marketCancelButton" type="button" (click)="goToDashboard()" class="btn btn-default">Cancel</button>
+            <button id="marketSaveButton" type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>

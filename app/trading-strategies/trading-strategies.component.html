@@ -12,38 +12,19 @@
                     <div class="panel-heading">
                         <span>Strategy {{i + 1}}</span>
                         <span class="glyphicon glyphicon-remove pull-right"
-                              *ngIf="tradingStrategies.length > 1"
+                              *ngIf="canBeDeleted()"
                               (click)="deleteTradingStrategy(tradingStrategies[i])"></span>
                     </div>
                     <div class="panel-body">
 
-                        <!-- Strategy Id -->
-                        <div class="row">
-                            <div class="col-sm-6 form-group">
-                                <label for="tradingStrategyId_{{i}}">Id:</label>
-                                <input [(ngModel)]="tradingStrategies[i].id"
-                                       type="text" class="form-control" id="tradingStrategyId_{{i}}"
-                                       name="tradingStrategyId_{{i}}" #tradingStrategyId="ngModel" required
-                                       maxlength="50"/>
-
-                                <!--<div [hidden]="marketId.valid || marketId.pristine" class="alert alert-danger">-->
-                                <!--Market Id must be set.-->
-                                <!--</div>-->
-
-                                <div [hidden]="tradingStrategyId.valid || (tradingStrategyId.pristine && !f.submitted)"
-                                     class="alert alert-danger">
-                                      Strategy Id must be set.
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Strategy Name -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="tradingStrategyName_{{i}}">Name:</label>
-                                <input [(ngModel)]="tradingStrategies[i].label"
+                                <label for="tradingStrategyName_{{i}}">Name</label>
+                                <input [(ngModel)]="tradingStrategies[i].name"
                                        type="text" class="form-control" id="tradingStrategyName_{{i}}"
-                                       name="tradingStrategyName_{{i}}" #tradingStrategyName="ngModel" required maxlength="50"/>
+                                       name="tradingStrategyName_{{i}}" #tradingStrategyName="ngModel"
+                                       required maxlength="50"/>
 
                                 <!--<div *ngIf="formErrors.marketName" class="alert alert-danger">{{ formErrors.marketName }}</div>-->
 
@@ -61,10 +42,10 @@
                         <!-- Strategy Description-->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="tradingStrategyDescrption_{{i}}">Description:</label>
+                                <label for="tradingStrategyDescription_{{i}}">Description</label>
                                 <input [(ngModel)]="tradingStrategies[i].description"
-                                       type="text" class="form-control" id="tradingStrategyDescrption_{{i}}"
-                                       name="tradingStrategyDescrption_{{i}}" #tradingStrategyDescription="ngModel"
+                                       type="text" class="form-control" id="tradingStrategyDescription_{{i}}"
+                                       name="tradingStrategyDescription_{{i}}" #tradingStrategyDescription="ngModel"
                                        maxlength="121"/>
 
                                 <!--<div [hidden]="baseCurrency.valid || baseCurrency.pristine" class="alert alert-danger">-->
@@ -80,11 +61,12 @@
                         <!-- Strategy classname -->
                         <div class="row">
                             <div class="col-sm-6 form-group">
-                                <label for="tradingStrategyClassname_{{i}}">Class Name:</label>
+                                <label for="tradingStrategyClassname_{{i}}">Class Name</label>
                                 <input [(ngModel)]="tradingStrategies[i].className" name="tradingStrategyClassname_{{i}}"
                                        placeholder="com.my.MyTradingStrategyClass" id="tradingStrategyClassname_{{i}}"
                                        type="text" class="form-control" required maxlength="120"
-                                       #tradingStrategyClassname ="ngModel"/>
+                                       #tradingStrategyClassname ="ngModel"
+                                       pattern="([a-zA-Z_$][a-zA-Z\\d_$]*\.)*[a-zA-Z_$][a-zA-Z\\d_$]*"/>
 
                                 <div [hidden]="tradingStrategyClassname.valid || (tradingStrategyClassname.pristine && !f.submitted)" class="alert alert-danger">
                                     Strategy Class Name must be valid Java class, e.g. com.my.MyTradingStrategyClass
@@ -110,8 +92,27 @@
              Must have type for button else Chrome reloads entire app on Cancel click!
              http://stackoverflow.com/questions/38120756/angular2-router-navigate-refresh-page
              -->
-            <button type="button" (click)="goToDashboard()" class="btn btn-default">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button id="strategyCancelButton" type="button" (click)="goToDashboard()" class="btn btn-default">Cancel</button>
+            <button id="strategySaveButton" type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>
+
+<div *ngIf="!canDeleteStrategy" class="modal fade show in danger" id="cannotDeleteStrategyModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <h4 class="modal-title">Trading Strategy Still In Use</h4>
+            </div>
+            <div class="modal-body">
+                <p>You cannot delete this Trading Strategy because it is still being used my a Market on the Exchange.</p>
+                <p>Please check your Market configuration.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="hideCannotDeleteStrategyModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -2,7 +2,7 @@ import {OnInit, Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {NgForm} from '@angular/forms';
 import {Market, MarketHttpDataPromiseService} from '../model/market/';
-import {TradingStrategy} from '../model/trading-strategy';
+import {TradingStrategy, TradingStrategyHttpDataPromiseService} from '../model/trading-strategy';
 
 /**
  * Template-driven version of the Markets form.
@@ -19,6 +19,7 @@ export class MarketsComponent implements OnInit {
 
     markets: Market[] = [];
     deletedMarkets: Market[] = [];
+    tradingStrategies: TradingStrategy[] = [];
     exchangeId;
     active = true;
 
@@ -42,7 +43,8 @@ export class MarketsComponent implements OnInit {
         }
     };
 
-    constructor(private marketDataService: MarketHttpDataPromiseService, private route: ActivatedRoute,
+    constructor(private marketDataService: MarketHttpDataPromiseService,
+                private tradingStrategyDataService: TradingStrategyHttpDataPromiseService, private route: ActivatedRoute,
                 private router: Router) {
     }
 
@@ -51,6 +53,9 @@ export class MarketsComponent implements OnInit {
             this.exchangeId = params['id'];
             this.marketDataService.getAllMarketsForExchange(this.exchangeId)
                 .then(markets => this.markets = markets);
+
+            this.tradingStrategyDataService.getAllTradingStrategiesForExchange(this.exchangeId)
+                .then(tradingStrategies => this.tradingStrategies = tradingStrategies);
         });
     }
 
@@ -59,8 +64,9 @@ export class MarketsComponent implements OnInit {
     }
 
     addMarket(): void {
-        let tradingStrategy = new TradingStrategy(null, null, this.exchangeId, null, null);
-        this.markets.push(new Market(null, null, this.exchangeId , false, null, null, tradingStrategy));
+        // TODO check name given is unique for current Exchange
+        let tradingStrategy = new TradingStrategy(this.createUuid(), this.exchangeId, null, null, null);
+        this.markets.push(new Market(this.createUuid(), this.exchangeId, null, false, null, null, tradingStrategy));
     }
 
     deleteMarket(market: Market): void {
@@ -80,6 +86,16 @@ export class MarketsComponent implements OnInit {
                     .then(() => this.goToDashboard());
             });
         }
+    }
+
+    // TODO Only here temporarily for use with angular-in-memory-web-api until server side wired up.
+    // Server will create UUID and return in POST response object.
+    // Algo by @Broofa - http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/2117523#2117523
+    createUuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
 
     // ------------------------------------------------------------------

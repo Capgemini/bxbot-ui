@@ -15,47 +15,47 @@ export class InMemoryDataService implements InMemoryDbService {
         let exchanges = [
             {
                 id: 'bitstamp',
-                label: 'Bitstamp',
+                name: 'Bitstamp',
                 status: 'Running'
             },
             {
                 id: 'gdax',
-                label: 'GDAX',
+                name: 'GDAX',
                 status: 'Running'
             },
             {
                 id: 'gemini',
-                label: 'Gemini',
+                name: 'Gemini',
                 status: 'Stopped'
             },
             {
                 id: 'itbit',
-                label: 'ItBit',
+                name: 'ItBit',
                 status: 'Running'
             },
             {
                 id: 'btce',
-                label: 'BTC-e',
+                name: 'BTC-e',
                 status: 'Running'
             },
             {
                 id: 'okcoin',
-                label: 'OKCoin',
+                name: 'OKCoin',
                 status: 'Running'
             },
             {
                 id: 'bitfinex',
-                label: 'Bitfinex',
+                name: 'Bitfinex',
                 status: 'Stopped'
             },
             {
                 id: 'huobi',
-                label: 'Huobi',
+                name: 'Huobi',
                 status: 'Stopped'
             },
             {
                 id: 'kraken',
-                label: 'Kraken',
+                name: 'Kraken',
                 status: 'Running'
             }
         ];
@@ -66,8 +66,8 @@ export class InMemoryDataService implements InMemoryDbService {
         let exchangeAdapters = [
             {
                 id: 'bitstamp',
-                exchangeId: 'bitstamp',
-                adapter: 'com.gazbert.bxbot.exchanges.BitstampExchangeAdapter',
+                name: 'Bitstamp REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.BitstampExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 60,
                     nonFatalErrorHttpStatusCodes: [
@@ -82,8 +82,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'gdax',
-                exchangeId: 'gdax',
-                adapter: 'com.gazbert.bxbot.exchanges.GdaxExchangeAdapter',
+                name: 'GDAX REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.GdaxExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 120,
                     nonFatalErrorHttpStatusCodes: [
@@ -98,8 +98,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'gemini',
-                exchangeId: 'gemini',
-                adapter: 'com.gazbert.bxbot.exchanges.GeminiExchangeAdapter',
+                name: 'Gemini REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.GeminiExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 90,
                     nonFatalErrorHttpStatusCodes: [
@@ -114,8 +114,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'itbit',
-                exchangeId: 'itbit',
-                adapter: 'com.gazbert.bxbot.exchanges.ItBitExchangeAdapter',
+                name: 'ItBit REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.ItBitExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 30,
                     nonFatalErrorHttpStatusCodes: [
@@ -130,8 +130,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'btce',
-                exchangeId: 'btce',
-                adapter: 'com.gazbert.bxbot.exchanges.BtceExchangeAdapter',
+                name: 'BTC-e API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.BtceExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 45,
                     nonFatalErrorHttpStatusCodes: [
@@ -146,8 +146,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'okcoin',
-                exchangeId: 'okcoin',
-                adapter: 'com.gazbert.bxbot.exchanges.OkCoinExchangeAdapter',
+                name: 'OKCoin REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.OkCoinExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 50,
                     nonFatalErrorHttpStatusCodes: [
@@ -162,8 +162,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'bitfinex',
-                exchangeId: 'bitfinex',
-                adapter: 'com.gazbert.bxbot.exchanges.BitfinexExchangeAdapter',
+                name: 'Bitfinex REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.BitfinexExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 20,
                     nonFatalErrorHttpStatusCodes: [
@@ -178,8 +178,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'huobi',
-                exchangeId: 'huobi',
-                adapter: 'com.gazbert.bxbot.exchanges.HuobiExchangeAdapter',
+                name: 'Huobi REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.HuobiExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 10,
                     nonFatalErrorHttpStatusCodes: [
@@ -194,8 +194,8 @@ export class InMemoryDataService implements InMemoryDbService {
             },
             {
                 id: 'kraken',
-                exchangeId: 'kraken',
-                adapter: 'com.gazbert.bxbot.exchanges.KrakenExchangeAdapter',
+                name: 'Kraken REST API Adapter',
+                className: 'com.gazbert.bxbot.exchanges.KrakenExchangeAdapter',
                 networkConfig: {
                     connectionTimeout: 60,
                     nonFatalErrorHttpStatusCodes: [
@@ -215,93 +215,168 @@ export class InMemoryDataService implements InMemoryDbService {
         let markets = [
             {
                 id: 'bitstamp_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'bitstamp',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'bitstamp_ema'}
+                tradingStrategy: {
+                    id: 'bitstamp_ema',
+                    exchangeId: 'bitstamp',
+                    name: 'EMA Indicator',
+                    description: 'EMA Indicator algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+                }
             },
             {
                 id: 'btce_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'btce',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'btce_macd_rsi'}
+                tradingStrategy: {
+                    id: 'btce_macd_rsi',
+                    exchangeId: 'btce',
+                    name: 'MACD RSI Indicator',
+                    description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
+                }
+            },
+            {
+                id: 'btce_ltc_usd',
+                exchangeId: 'btce',
+                name: 'LTC/USD',
+                enabled: true,
+                baseCurrency: 'LTC',
+                counterCurrency: 'USD',
+                tradingStrategy: {
+                    id: 'btce_long-scalper',
+                    exchangeId: 'btce',
+                    name: 'Long Scalper',
+                    description: 'Scalping strategy that buys low and sells high.',
+                    className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+                }
             },
             {
                 id: 'gdax_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'gdax',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'gdax_short-scalper'}
+                tradingStrategy: {
+                    id: 'gdax_ema',
+                    exchangeId: 'gdax',
+                    name: 'EMA Indicator',
+                    description: 'EMA Indicator algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+                }
             },
             {
                 id: 'gdax_btc_gbp',
-                label: 'BTC/GBP',
                 exchangeId: 'gdax',
+                name: 'BTC/GBP',
                 enabled: true,
                 baseCurrency: 'BTC',
                 counterCurrency: 'GBP',
-                tradingStrategy: {id: 'gdax_long-scalper'}
+                tradingStrategy: {
+                    id: 'gdax_long-scalper',
+                    exchangeId: 'gdax',
+                    name: 'Long Scalper',
+                    description: 'Scalping strategy that buys low and sells high.',
+                    className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+                }
             },
             {
                 id: 'gemini_eth_btc',
-                label: 'ETH/BTC',
                 exchangeId: 'gemini',
+                name: 'ETH/BTC',
                 enabled: false,
                 baseCurrency: 'ETH',
                 counterCurrency: 'BTC',
-                tradingStrategy: {id: 'gemini_macd'}
+                tradingStrategy: {
+                    id: 'gemini_macd',
+                    exchangeId: 'gemini',
+                    name: 'MACD Indicator',
+                    description: 'MACD Indicator algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.MacdStrategy'
+                }
             },
             {
                 id: 'okcoin_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'okcoin',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'okcoin_ema'}
+                tradingStrategy: {
+                    id: 'okcoin_ema',
+                    exchangeId: 'okcoin',
+                    name: 'MACD Indicator',
+                    description: 'EMA Indicator algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.EmaStrategy'
+                }
             },
             {
                 id: 'huobi_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'huobi',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'huobi_ema_rsi'}
+                tradingStrategy: {
+                    id: 'huobi_ema_rsi',
+                    exchangeId: 'huobi',
+                    name: 'MACD RSI Indicator',
+                    description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
+                }
             },
             {
                 id: 'bitfinex_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'bitfinex',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'bitfinex_long-scalper'}
+                tradingStrategy: {
+                    id: 'bitfinex_long-scalper',
+                    exchangeId: 'bitfinex',
+                    name: 'Long Scalper',
+                    description: 'Scalping strategy that buys low and sells high.',
+                    className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
+                }
             },
             {
                 id: 'kraken_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'kraken',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'kraken_ema_rsi'}
+                tradingStrategy: {
+                    id: 'kraken_ema_rsi',
+                    exchangeId: 'kraken',
+                    name: 'EMA RSI Indicator',
+                    description: 'EMA Indicator and RSI algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.EmaRsiStrategy'
+                }
             },
             {
                 id: 'itbit_btc_usd',
-                label: 'BTC/USD',
                 exchangeId: 'itbit',
+                name: 'BTC/USD',
                 enabled: false,
                 baseCurrency: 'BTC',
                 counterCurrency: 'USD',
-                tradingStrategy: {id: 'itbit_long-scalper'}
+                tradingStrategy: {
+                    id: 'itbit_ema_rsi',
+                    exchangeId: 'itbit',
+                    name: 'MACD RSI Indicator',
+                    description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                    className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
+                }
             },
         ];
 
@@ -311,98 +386,112 @@ export class InMemoryDataService implements InMemoryDbService {
         let tradingStrategies = [
             {
                 id: 'btce_macd_rsi',
-                label: 'MACD RSI Indicator',
                 exchangeId: 'btce',
+                name: 'MACD RSI Indicator',
                 description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
             },
             {
                 id: 'btce_long-scalper',
-                label: 'Long Scalper',
                 exchangeId: 'btce',
+                name: 'Long Scalper',
                 description: 'Scalping strategy that buys low and sells high.',
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
             },
             {
+                id: 'btce_short-scalper',
+                exchangeId: 'btce',
+                name: 'Short Scalper',
+                description: 'Scalping strategy that sells and buys back more units at lower price.',
+                className: 'com.gazbert.bxbot.strategies.ShortScalperStrategy'
+            },
+            {
                 id: 'gdax_long-scalper',
-                label: 'Long Scalper',
                 exchangeId: 'gdax',
+                name: 'Long Scalper',
                 description: 'Scalping strategy that buys low and sells high.',
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
             },
             {
                 id: 'gdax_ema',
-                label: 'MACD Indicator',
                 exchangeId: 'gdax',
+                name: 'EMA Indicator',
                 description: 'EMA Indicator algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.EmaStrategy'
             },
             {
                 id: 'bitstamp_ema',
-                label: 'EMA Indicator',
                 exchangeId: 'bitstamp',
-                description: 'EAM Indicator algo for deciding when to enter and exit trades.',
+                name: 'EMA Indicator',
+                description: 'EMA Indicator algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.EmaStrategy'
             },
             {
                 id: 'gemini_macd',
-                label: 'MACD Indicator',
                 exchangeId: 'gemini',
+                name: 'MACD Indicator',
                 description: 'MACD Indicator algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.MacdStrategy'
             },
             {
                 id: 'gemini_long-scalper',
-                label: 'Long Scalper',
                 exchangeId: 'gemini',
+                name: 'Long Scalper',
                 description: 'Scalping strategy that buys low and sells high.',
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
             },
             {
                 id: 'okcoin_ema',
-                label: 'MACD Indicator',
                 exchangeId: 'okcoin',
+                name: 'MACD Indicator',
                 description: 'EMA Indicator algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.EmaStrategy'
             },
             {
                 id: 'huobi_ema_rsi',
-                label: 'MACD RSI Indicator',
                 exchangeId: 'huobi',
+                name: 'MACD RSI Indicator',
                 description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
             },
             {
                 id: 'bitfinex_long-scalper',
-                label: 'Long Scalper',
                 exchangeId: 'bitfinex',
+                name: 'Long Scalper',
                 description: 'Scalping strategy that buys low and sells high.',
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
             },
             {
                 id: 'kraken_ema_rsi',
-                label: 'EMA RSI Indicator',
                 exchangeId: 'kraken',
+                name: 'EMA RSI Indicator',
                 description: 'EMA Indicator and RSI algo for deciding when to enter and exit trades.',
                 className: 'com.gazbert.bxbot.strategies.EmaRsiStrategy'
             },
             {
                 id: 'itbit_long-scalper',
-                label: 'Long Scalper',
                 exchangeId: 'itbit',
+                name: 'Long Scalper',
                 description: 'Scalping strategy that buys low and sells high.',
                 className: 'com.gazbert.bxbot.strategies.LongScalperStrategy'
-            }
+            },
+            {
+                id: 'itbit_ema_rsi',
+                exchangeId: 'itbit',
+                name: 'MACD RSI Indicator',
+                description: 'MACD Indicator and RSI algo for deciding when to enter and exit trades.',
+                className: 'com.gazbert.bxbot.strategies.MacdRsiStrategy'
+            },
         ];
 
         /**
-         * The Email Alerts config for the bots running on the Exchanges.
+         * The Email Alerts config for the bots to send alert messages.
          */
         let emailAlerts = [
             {
                 id: 'btce_email_alerts',
                 exchangeId: 'btce',
-                enabled: true,
+                enabled: false,
                 smtpHost: 'smtp.gmail.com',
                 smtpPort: 587,
                 accountUsername: 'bobfett',
@@ -446,7 +535,7 @@ export class InMemoryDataService implements InMemoryDbService {
             {
                 id: 'huobi_email_alerts',
                 exchangeId: 'huobi',
-                enabled: true,
+                enabled: false,
                 smtpHost: 'smtp.gmail.com',
                 smtpPort: 587,
                 accountUsername: 'ackbar',
@@ -479,7 +568,7 @@ export class InMemoryDataService implements InMemoryDbService {
             {
                 id: 'bitfinex_email_alerts',
                 exchangeId: 'bitfinex',
-                enabled: true,
+                enabled: false,
                 smtpHost: 'smtp.gmail.com',
                 smtpPort: 587,
                 accountUsername: 'chewy',

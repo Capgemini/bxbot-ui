@@ -6,7 +6,7 @@ A learning project and simple Angular 2 sample app.
  
 It is a cut-down version of [BX-bot UI](https://github.com/gazbert/bxbot-ui).
 
-Coming soon...
+Very much work in progress, but this is where we're [heading](https://github.com/gazbert/bxbot-ui/projects/1)...
 
 ## Credits
 This app started life as the [Angular 2 QuickStart](https://github.com/angular/quickstart) app and took (a lot of)

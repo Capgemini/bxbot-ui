@@ -5,13 +5,13 @@
  */
 export class ExchangeAdapter {
     constructor(public id: string,
-                public exchangeId: string,
-                public adapter: string,
+                public name: string,
+                public className: string,
                 public networkConfig: NetworkConfig) {
     }
 
     clone() {
-        return new ExchangeAdapter(this.id, this.exchangeId, this.adapter, this.networkConfig);
+        return new ExchangeAdapter(this.id, this.name, this.className, this.networkConfig);
     }
 }
 
