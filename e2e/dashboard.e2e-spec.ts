@@ -21,7 +21,7 @@ describe('Dashboard Tests', function () {
         browser.get('');
     });
 
-    it('Should redirect blank base URL to /dashboard', function () {
+    it('should redirect blank base URL to /dashboard', function () {
         browser.getCurrentUrl().then(function (url) {
             expect(url).toContain('/dashboard');
         });
@@ -46,17 +46,17 @@ describe('Dashboard Tests', function () {
         expect(dashboardItems.count()).toBe(8);
     });
 
-    it('first dashboard Exchange item should be Bitstamp', function () {
+    it('should display Bitstamp as first dashboard Exchange item', function () {
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         expect(dashboardItems.get(0).getText()).toContain('Bitstamp');
     });
 
-    it('last dashboard Exchange item should be Huobi', function () {
+    it('should display Huobi as last dashboard Exchange item', function () {
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         expect(dashboardItems.get(7).getText()).toContain('Huobi');
     });
 
-    it('Should render Gemini Exchange specific link', function () {
+    it('should render Gemini Exchange specific link', function () {
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         dashboardItems.get(2).click();
 

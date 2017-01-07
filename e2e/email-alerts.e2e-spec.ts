@@ -12,7 +12,7 @@ import {browser, element, by} from "protractor";
 
 /**
  * Email Alert Config screen tests.
- * Test code seems very brittle - we need access to the model please Angular!
+ * Test code seems very brittle - can we have access to the model please Angular :-)
  *
  * TODO - Tests for updating/validating fields
  */
@@ -22,7 +22,7 @@ describe('Email Alerts Config Tests', function () {
         browser.get('');
     });
 
-    it('Should render Gemini Email Alerts config', function () {
+    it('should render Gemini Email Alerts config', function () {
 
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         dashboardItems.get(2).click();
@@ -38,7 +38,7 @@ describe('Email Alerts Config Tests', function () {
         expect(element(by.id('fromAddress')).getAttribute('value')).toBe('c-3p0@naboo.space');
     });
 
-    it('Should update Email Alerts fields after Save', function () {
+    it('should update Email Alerts fields after Save', function () {
 
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         dashboardItems.get(2).click();
@@ -101,7 +101,7 @@ describe('Email Alerts Config Tests', function () {
         expect(element(by.id('fromAddress')).getAttribute('value')).toBe(newFromAddress);
     });
 
-    it('Should NOT update Email Alerts fields after Cancel', function () {
+    it('should NOT update Email Alerts fields after Cancel', function () {
 
         let dashboardItems = element.all(by.css('bx-dashboard-item'));
         dashboardItems.get(2).click();
