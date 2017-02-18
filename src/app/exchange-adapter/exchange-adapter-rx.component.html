@@ -1,0 +1,116 @@
+<!--
+    Reactive (RxJS) version of the Exchange Adapter form.
+    See: https://angular.io/docs/ts/latest/guide/reactive-forms.html
+ -->
+<div *ngIf="exchangeAdapter">
+    <form *ngIf="active" novalidate [formGroup]="exchangeAdapterForm" (ngSubmit)="save(exchangeAdapterForm.valid)">
+
+        <!-- Adapter Name -->
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="adapterName">Name</label>
+                <input formControlName="adapterName" placeholder="My REST API Adapter" id="adapterName" type="text"
+                       class="form-control" maxlength="121" required/>
+                <div id="invalidAdapterName"
+                     *ngIf="formErrors.adapterName" class="alert alert-danger">{{ formErrors.adapterName }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Name -->
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="className">Class Name</label>
+                <input formControlName="className" placeholder="com.my.MyExchangeAdapter" id="className" type="text"
+                       class="form-control" maxlength="121" required/>
+                <div id="invalidClassName"
+                     *ngIf="formErrors.className" class="alert alert-danger">{{ formErrors.className }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Connection Timeout -->
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="connectionTimeout">Connection Timeout (secs)</label>
+                <input id="connectionTimeout" ngControlGroup="networkConfig" formControlName="connectionTimeout"
+                       type="text" class="form-control" placeholder="60" maxlength="8" required/>
+                <div id="invalidConnectionTimeout"
+                        *ngIf="formErrors.connectionTimeout" class="alert alert-danger">{{ formErrors.connectionTimeout }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Codes -->
+        <div class="row">
+            <div class="col-sm-6" formArrayName="nonFatalErrorHttpStatusCodes">
+                <h4>Non Fatal HTTP Status Codes</h4>
+                <div *ngFor="let nonFatalErrorHttpStatusCode of nonFatalErrorHttpStatusCodes.controls; let i=index"
+                     class="panel panel-default">
+                    <div class="panel-heading">
+                        <span>Code {{i + 1}}</span>
+                        <span id="deleteErrorCodeButton_{{i}}" class="glyphicon glyphicon-remove pull-right"
+                              *ngIf="nonFatalErrorHttpStatusCodes.controls.length > 1"
+                              (click)="deleteErrorCode(i)"></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="errorCode_{{i}}" class="col-sm-6">HTTP Status Code</label>
+                            <input id="errorCode_{{i}}" class="col-sm-6" type="text" [formControlName]="i" maxlength="3" required>
+                            <div id="invalidErrorCode_{{i}}" [hidden]="nonFatalErrorHttpStatusCodes.controls[i].valid ||
+                                 (nonFatalErrorHttpStatusCodes.controls[i].pristine && !isFormSaved())"
+                                 class="alert alert-danger col-sm-6">
+                                {{ formErrors.nonFatalErrorHttpStatusCodes }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-20">
+                    <a id="addNewErrorCodeLink" (click)="addErrorCode()" style="cursor: default">
+                        Add error code +
+                    </a>
+                </div>
+            </div>
+
+            <!-- Error Messages -->
+            <div class="col-sm-6" formArrayName="nonFatalErrorMessages">
+                <h4>Non Fatal Error Messages</h4>
+                <div *ngFor="let nonFatalErrorMessage of nonFatalErrorMessages.controls; let i=index"
+                     class="panel panel-default">
+                    <div class="panel-heading">
+                        <span>Message {{i + 1}}</span>
+                        <span id="deleteErrorMessageButton_{{i}}" class="glyphicon glyphicon-remove pull-right"
+                              *ngIf="nonFatalErrorMessages.controls.length > 0"
+                              (click)="deleteErrorMessage(i)"></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="errorMessage_{{i}}" class="col-sm-5">Error Message</label>
+                            <input id="errorMessage_{{i}}" class="col-sm-7" type="text" [formControlName]="i" maxlength="121" required>
+                            <div id="invalidErrorMessage_{{i}}" [hidden]="nonFatalErrorMessages.controls[i].valid ||
+                                 (nonFatalErrorMessages.controls[i].pristine && !isFormSaved())"
+                                 class="alert alert-danger col-sm-7">
+                                {{ formErrors.nonFatalErrorMessages }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-20">
+                    <a id="addNewErrorMessageLink" (click)="addErrorMessage()" style="cursor: default">
+                        Add error message +
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <hr>
+        </div>
+        <div>
+            <!-- Must have type for button else Chrome reloads entire app on Cancel click!
+                 http://stackoverflow.com/questions/38120756/angular2-router-navigate-refresh-page
+             -->
+            <button id="exchangeAdapterCancelButton" type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
+            <button id="exchangeAdapterSaveButton" type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

@@ -5,7 +5,7 @@
 //
 // AND THEN EVERYTIME ...
 //   1. Compile with `tsc`
-//   2. Make sure the test server (e.g., http-server: localhost:8080) is running.
+//   2. Make sure the test server (e.g., lite-server: localhost:8080) is running.
 //   3. ./node_modules/.bin/protractor protractor.config.js
 //
 //   To do all steps, try:  `npm run e2e`
@@ -18,7 +18,7 @@ var _ = require('lodash');
 exports.config = {
     directConnect: true,
 
-    // Capabilities to be passed to the webdriver instance.
+    // Capabilities to be passed to the  webdriver instance.
     capabilities: {
         'browserName': 'chrome'
     },
@@ -28,15 +28,7 @@ exports.config = {
 
     // Spec patterns are relative to this config file
     specs: [
-        // '**/*e2e-spec.js'
-
-        '**/app.e2e-spec.js',
-        '**/dashboard.e2e-spec.js',
-        '**/email-alerts.e2e-spec.js',
-        '**/exchange-adapter.e2e-spec.js',
-        '**/exchange-details.e2e-spec.js',
-        '**/markets.e2e-spec.js',
-        '**/trading-strategies.e2e-spec.js'
+        '**/*e2e-spec.js'
     ],
 
     // For angular tests
@@ -66,7 +58,7 @@ exports.config = {
     },
 
     jasmineNodeOpts: {
-        defaultTimeoutInterval: 15000,
+        defaultTimeoutInterval: 60000,
         showTiming: true,
         print: function () {
         }
