@@ -1,10 +1,10 @@
-# BX-bot UI (Angular 2 Sample App)
+# BX-bot UI
 
 [![Build Status](https://travis-ci.org/Capgemini/bxbot-ui.svg?branch=master)](https://travis-ci.org/Capgemini/bxbot-ui)
+
+## What is BX-bot UI?
     
-A learning project and simple Angular 2 sample app.
- 
-It is a cut-down version of [BX-bot UI](https://github.com/gazbert/bxbot-ui).
+BX-bot UI is a learning project and simple Angular 2 sample app for administering a [Bitcoin trading bot](https://github.com/gazbert/bxbot).
 
 Very much work in progress, but this is where we're [heading](https://github.com/gazbert/bxbot-ui/projects/1)...
 
